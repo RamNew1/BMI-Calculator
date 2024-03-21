@@ -2,62 +2,56 @@ import './App.css';
 import React, {useState} from 'react'
 
 function App() {
-  const [height,setHeight]=useState()
-  const [weight,setWeight]=useState()
-  const [bmi,setBmi]=useState()
-  const [conclude,setConclude]=useState('')
-  const [color,setColor]=useState("")
+const [tempInput,setTempInput]=useState('');
+const [fromType,setFromType]=useState('celsius');
+const [toType,setToType]=useState('fahrenheit');
+const [result,setResult]=useState();
+const [value,setValue]=useState(false)
+const [error,setError]=useState('')
 
- const handleCalculate = () =>{
-      const heightInMeters = height / 100;
-      const bmiValue = weight/(heightInMeters*heightInMeters);
-      setBmi(bmiValue.toFixed(2))
-      if(bmiValue<18.5){
-        setConclude('UnderWeight');
-        setColor('Blue')
-      }else if (bmiValue>=18.5 && bmiValue<24.9){
-        setConclude('Normal Weight');
-        setColor('Green')
-      }else if(bmiValue>=25 && bmiValue<29.9){
-        setConclude('Over Weight');
-        setColor('Yellow')
-      }else if(bmiValue>=30 && bmiValue<39.9){
-        setConclude("Obesity");
-        setColor('Orange')
-      }else{
-        setConclude('Extreme Obesity');
-        setColor('Red')
-      }
+const handleSubmit=() =>{
+  console.log('button Clicked');
+  let temperature;
+  if(tempInput === ''){
+    setValue(false);
+    setError('Please enter a value')
+    // alert('Please enter a value')
   }
-
-
+ if(tempInput !== '' && fromType === 'celsius' && toType === 'fahrenheit'){
+    setValue(true);
+    temperature = (parseFloat(tempInput)*1.8)+32;
+    setResult(temperature.toFixed());
+  }else if(tempInput !== '' && fromType === 'fahrenheit' && toType === 'celsius'){
+    setValue(true);
+    temperature = (parseFloat(tempInput)-32)*5/9;
+    setResult(temperature.toFixed(0));
+  }else{
+    setResult(tempInput);
+  }
+}
+  
   return (
-    <div className="App container">
-      <div style={{backgroundImage:"linear-gradient(red,white)"}}>
-      <h1>Body Mass Index</h1>
-      <hr />
-      </div>
-      <div>
-          <label htmlFor='height'>Height (cm) :</label>
-          <input type='number' value={height} onChange={(e)=>setHeight(e.target.value)} />
-      </div>
-      <div>
-          <label htmlFor='height'>Weight (kg) :</label>
-          <input type='number' value={weight} onChange={(e)=>setWeight(e.target.value)} />
-      </div>
-      <button onClick={handleCalculate}>Calculate</button>
-      <div className='bmi-menu'>
-        <div>
-        <h3>BMI : {bmi}</h3>
-        <p><strong style={{color:color}}>{conclude}</strong></p>
-        </div>
-        <div className='category'>
-          <p>(0-18.5) -Underweight</p>
-          <p>(18.5 - 24.9) - Normal Weight</p>
-          <p>(25-29.9) - Over Weight</p>
-          <p>(30-39.9) - Obesity</p>
-          <p>('--40')Extreme Obesity</p>
-        </div>
+    <div className='App'>
+      <h1>Temperature Converter</h1>
+      <hr></hr>
+      <div className='container'>
+      <input type='number' value={tempInput} onChange={(e)=>setTempInput(e.target.value)} placeholder='Enter Temperature Value' required></input>
+      <label>Type:</label>
+      <select value={fromType} onChange={(e)=>setFromType(e.target.value)}>
+        <option value='celsius'>Celsius</option>
+        <option value='fahrenheit'>Fahrenheit</option>
+      </select><br></br>
+      <label>To:</label>
+      <select value={toType} onChange={(e)=>setToType(e.target.value)}>
+        <option value='fahrenheit'>Fahrenheit</option>
+        <option value='celsius'>Celsius</option>
+      </select><br></br>
+      <button id='submit' onClick={()=>handleSubmit()}>Calculate</button><br></br>
+
+      {value?(
+        <p className='result'>
+      {tempInput} degree {fromType} is {result} degrees {toType} </p>):(<p id='error'>{error}</p>)
+      }
       </div>
     </div>
   );

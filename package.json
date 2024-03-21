@@ -1,6 +1,6 @@
 {
-  "homepage": "https://RamNew1.github.io/Bmi-Calculator",
-  "name": "bmi-app",
+  "homepage": "https://RamNew1.github.io/Temperature-Converter",
+  "name": "temperature-converter",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
